@@ -70,10 +70,11 @@
 </table>
 
 <script>
-    function onload(){
+    document.addEventListener('DOMContentLoaded', function() {
         let sessions = JSON.parse(window.localStorage.sessions)
-        console.log(sessions)
-    }
+        table = document.getElementByID("myCollapsibleTable")
+
+    });
 
   // Get all toggle buttons
   var toggleButtons = document.querySelectorAll('.toggle-button');
