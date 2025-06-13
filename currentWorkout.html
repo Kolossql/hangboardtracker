@@ -74,6 +74,11 @@
         let pinch = document.getElementById("pinch").value
         let time = document.getElementById("time").value
         console.log(document.getElementById("edge").value + " || " + document.getElementById("time").value)
+        if (document.getElementById('type').options[mySelect.selectedIndex].textContent == "hangboard") {
+            console.log("hang")
+        }else{
+            console.log("pinch")
+        }
         window.workouts
     }
 </script>
