@@ -70,14 +70,16 @@
         }
 
         let edge = document.getElementById("edge").value
-        let pinch = document.getElementById("pinch").value
+        let pinch = document.getElementById("pinch").selectedIndex
         let time = document.getElementById("time").value
         console.log(document.getElementById('type').selectedIndex)
         
         if (document.getElementById('type').selectedIndex == 0) {
             console.log("hang")
+            window.localStorage.workouts.push(new hangboard(time, edge))
         }else{
             console.log("pinch")
+            window.localStorage.workouts.push(new pinchblock(time, pinch))
         }
         // window.workouts
     }
