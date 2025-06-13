@@ -52,21 +52,22 @@
     });
     function validateForm() {
         class workout{
-            constructor(t, n){
-                this.id = 
+            constructor(t, n, lbs){
+                this.weight = lbs
+                this.id = n
                 this.time = t
             }
         }
         class hangboard extends workout{
-            constructor(n, t, e){
-                super(t, n)
+            constructor(n, t, e ,lbs ){
+                super(t, n, lbs)
                 this.type = "h"
                 this.edge = e
             }
         }
         class pinchblock extends workout{
-            constructor(n, t, w){
-                super(t, n)
+            constructor(n, t, w, lbs){
+                super(t, n, lbs)
                 this.type = "p"
                 this.width = w
             }
