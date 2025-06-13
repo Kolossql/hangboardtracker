@@ -75,6 +75,11 @@
         // to reflect the initial state of the select element.
         // However, in this case, our default option is already handled.
     });
+    function onload(){
+        document.getElementById('changedHeading').textContent = "Edge Width";
+        document.getElementById("edge").style.display = 'block';
+        document.getElementById("pinch").style.display = 'none';
+    }
     function resetSession(){
         window.localStorage.workout = JSON.stringify({thisSession: [], num: 0})
     }
