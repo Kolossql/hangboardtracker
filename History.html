@@ -71,12 +71,18 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let sessions = JSON.parse(window.localStorage.sessions)
+        let sessions = JSON.parse(window.localStorage.sessions).sessions
+        console.log(sessions)
         table = document.getElementById("myCollapsibleTable")
-        
+        let c = 10
         for (let session of sessions){
+
             const controlRow = table.insertRow(-1);
             const button = controlRow.insertCell(0);
+            const date = controlRow.insertCell(1);
+            const expand = controlRow.insertCell(2);
+            expand.innerHTML = "Expand To See More"
+            expand.classList.add("hidden-row", "row" + c)
         }
 
     });
