@@ -82,28 +82,37 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Sample workout data (if localStorage is empty)
+            // Sample workout data as a 2D array (each sub-array is a collapsible section)
             const sampleWorkouts = [
-                { type: "hangboard", time: 30, edge: "20mm", date: "2025-06-10" },
-                { type: "pinchblock", time: 45, width: "4 inches", date: "2025-06-10" },
-                { type: "hangboard", time: 35, edge: "15mm", date: "2025-06-11" },
-                { type: "workout", time: 60, date: "2025-06-11" },
-                { type: "pinchblock", time: 50, width: "5 inches", date: "2025-06-12" },
-                { type: "workout", time: 90, date: "2025-06-12" },
-                { type: "hangboard", time: 25, edge: "25mm", date: "2025-06-13" }
+                // Workout Group 1: Mixed workouts
+                [
+                    { type: "hangboard", time: 30, edge: "20mm", date: "2025-06-10" },
+                    { type: "workout", time: 60, date: "2025-06-11" },
+                    { type: "pinchblock", time: 50, width: "5 inches", date: "2025-06-12" }
+                ],
+                // Workout Group 2: Focus on Strength
+                [
+                    { type: "pinchblock", time: 45, width: "4 inches", date: "2025-06-10" },
+                    { type: "hangboard", time: 35, edge: "15mm", date: "2025-06-11" }
+                ],
+                // Workout Group 3: Endurance focused
+                [
+                    { type: "workout", time: 90, date: "2025-06-12" },
+                    { type: "hangboard", time: 25, edge: "25mm", date: "2025-06-13" }
+                ]
             ];
 
             // Get workouts from localStorage or use sample data
             let workouts = [];
             try {
-                // const storedWorkouts = localStorage.getItem('sessions');
-                console.log(storedWorkouts)
+                const storedWorkouts = localStorage.getItem('workoutSessions');
                 if (storedWorkouts) {
+                    // Expecting a 2D array from localStorage now
                     workouts = JSON.parse(storedWorkouts);
                 } else {
                     // If no data, use sample data and save it to localStorage
                     workouts = sampleWorkouts;
-                    // localStorage.setItem('workoutSessions', JSON.stringify(sampleWorkouts));
+                    localStorage.setItem('workoutSessions', JSON.stringify(sampleWorkouts));
                 }
             } catch (e) {
                 console.error("Failed to parse workout data from localStorage, using sample data:", e);
@@ -111,73 +120,62 @@
                 localStorage.setItem('workoutSessions', JSON.stringify(sampleWorkouts));
             }
 
-            console.log(workouts)
-
-
             const workoutTableBodyContainer = document.getElementById('workoutTableBodyContainer');
             workoutTableBodyContainer.innerHTML = ''; // Clear initial loading message
 
-            // Group workouts by type
-            const groupedWorkouts = workouts.reduce((acc, workout) => {
-                const type = workout.type.toLowerCase();
-                if (!acc[type]) {
-                    acc[type] = [];
-                }
-                acc[type].push(workout);
-                return acc;
-            }, {});
+            // Generate table sections dynamically from the 2D array
+            workouts.forEach((sessionGroup, groupIndex) => {
+                const sectionId = `group-${groupIndex + 1}`; // Unique ID for each group/section
 
-            // Generate table sections dynamically
-            for (const type in groupedWorkouts) {
-                if (groupedWorkouts.hasOwnProperty(type)) {
-                    const sessionsOfType = groupedWorkouts[type];
-                    const sectionId = type.replace(/\s+/g, '-'); // Create a valid ID from the type
+                // Create a new tbody for each collapsible section
+                const tbody = document.createElement('tbody');
+                tbody.classList.add('bg-white', 'divide-y', 'divide-gray-200');
 
-                    // Create a new tbody for each collapsible section
-                    const tbody = document.createElement('tbody');
-                    tbody.classList.add('bg-white', 'divide-y', 'divide-gray-200');
+                // Create the collapsible header row for this section
+                const headerRow = document.createElement('tr');
+                headerRow.classList.add('collapsible-header');
+                headerRow.dataset.sectionId = sectionId; // Set data-section-id
 
-                    // Create the collapsible header row for this section
-                    const headerRow = document.createElement('tr');
-                    headerRow.classList.add('collapsible-header');
-                    headerRow.dataset.sectionId = sectionId;
+                // Determine header text for the group
+                const groupTitle = `Workout Group ${groupIndex + 1}`;
+                const sessionCount = sessionGroup.length;
+                const sessionsText = sessionCount === 1 ? 'session' : 'sessions';
 
-                    headerRow.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="toggle-icon">+</span> ${type.charAt(0).toUpperCase() + type.slice(1)} Workouts
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" colspan="3">
-                            ${sessionsOfType.length} session${sessionsOfType.length !== 1 ? 's' : ''}
-                        </td>
+                headerRow.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="toggle-icon">+</span> ${groupTitle}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" colspan="3">
+                        ${sessionCount} ${sessionsText}
+                    </td>
+                `;
+                tbody.appendChild(headerRow);
+
+                // Add content rows for each workout in this specific group
+                sessionGroup.forEach((session) => {
+                    const contentRow = document.createElement('tr');
+                    // Add classes for hidden rows and specific section targeting
+                    contentRow.classList.add('collapsible-content', `section-${sectionId}`, 'hidden-row');
+
+                    let specifics = 'N/A';
+                    if (session.type === 'hangboard' && session.edge) {
+                        specifics = `Edge: ${session.edge}`;
+                    } else if (session.type === 'pinchblock' && session.width) {
+                        specifics = `Width: ${session.width}`;
+                    }
+
+                    contentRow.innerHTML = `
+                        <td class="px-6 py-4 text-sm text-gray-900 pl-12">${session.type.charAt(0).toUpperCase() + session.type.slice(1)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${session.time}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${session.date || 'N/A'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${specifics}</td>
                     `;
-                    tbody.appendChild(headerRow);
+                    tbody.appendChild(contentRow);
+                });
 
-                    // Add content rows for each workout in this section
-                    sessionsOfType.forEach((session, index) => {
-                        const contentRow = document.createElement('tr');
-                        // Add classes for hidden rows and specific section targeting
-                        contentRow.classList.add('collapsible-content', `section-${sectionId}`, 'hidden-row');
-
-                        let specifics = 'N/A';
-                        if (session.type === 'hangboard' && session.edge) {
-                            specifics = `Edge: ${session.edge}`;
-                        } else if (session.type === 'pinchblock' && session.width) {
-                            specifics = `Width: ${session.width}`;
-                        }
-
-                        contentRow.innerHTML = `
-                            <td class="px-6 py-4 text-sm text-gray-900 pl-12">${session.type.charAt(0).toUpperCase() + session.type.slice(1)}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${session.time}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${session.date || 'N/A'}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${specifics}</td>
-                        `;
-                        tbody.appendChild(contentRow);
-                    });
-
-                    // Append the completed tbody section to the main table container
-                    workoutTableBodyContainer.appendChild(tbody);
-                }
-            }
+                // Append the completed tbody section to the main table container
+                workoutTableBodyContainer.appendChild(tbody);
+            });
 
             // Re-apply event listeners to the new collapsible headers
             const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
@@ -191,6 +189,7 @@
                         row.classList.toggle('hidden-row');
                     });
 
+                    // Update the toggle icon based on the visibility of the first content row
                     if (contentRows.length > 0 && contentRows[0].classList.contains('hidden-row')) {
                         toggleIcon.textContent = '+';
                     } else {
@@ -198,14 +197,6 @@
                     }
                 });
             });
-
-            // Optional: Hide all sections initially (they are already hidden by default CSS)
-            // But if you want to explicitly close them on load, you can trigger their click event.
-            // collapsibleHeaders.forEach(header => {
-            //     if (header.dataset.sectionId !== 'defaultOpenSection') { // Example to keep one section open
-            //         header.click(); // Programmatically click to hide
-            //     }
-            // });
         });
     </script>
 
