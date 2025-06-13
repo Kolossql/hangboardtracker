@@ -79,12 +79,14 @@
 
             //visible row
             const controlRow = table.insertRow(-1);
-            const button = controlRow.insertCell(0);
-            const date = controlRow.insertCell(1);
-            const expand = controlRow.insertCell(2);
-            expand.textContent = "Expand To See More"
-            expand.classList.add("hidden-row", "row" + c)
-            expand.setAttribute('colspan', '3');
+            button = controlRow.insertCell(0);
+            // <button class="toggle-button" data-row-id="row1">Toggle</button>
+            button.classList.add("toggle-button")
+            button.setAttribute(data-row-id, "row"+c)
+            date = controlRow.insertCell(1);
+            detail = controlRow.insertCell(2);
+            detail.textContent = "Expand To See More"
+            detail.setAttribute('colspan', '3');
             //subtitles
             const titleRow = table.insertRow(-1);
             const typeH = titleRow.insertCell(0);
@@ -97,12 +99,14 @@
             typeH.textContent("Time");
             const weightH = titleRow.insertCell(4);
             typeH.textContent("Weight");
-
+            //
 
 
             for (let lift of session){
 
             }
+
+            c++;
         }
 
     });
