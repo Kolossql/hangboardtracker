@@ -40,7 +40,7 @@
 <table id="myCollapsibleTable">
   <thead>
     <tr>
-      <th>Toggle</th> <th>Workout Date</th>
+      <th >Toggle</th> <th>Workout Date</th>
       <th colspan="3">Details</th>
     </tr>
   </thead>
@@ -50,7 +50,7 @@
       <td>6/13/2025</td>
       <td colspan ="3">Expand To See More</td>
     </tr>
-    <tr id="row1" class="hidden-row">
+    <tr class="hidden-row row1">
         <td colspan="1"> 
         <strong>Type</strong>
         </td>
@@ -59,7 +59,7 @@
         <td> <strong>Time</strong></td>
         <td> <strong>Weight</strong></td>
     </tr>
-    <tr id="row1" class="hidden-row">
+    <tr class="hidden-row row1">
         <td colspan="1">hang</td>
         <td>6/13/2025</td>
         <td> 20 mm</td>
@@ -78,7 +78,8 @@
     button.addEventListener('click', function() {
       // Get the ID of the row to toggle from the data-row-id attribute
       var rowId = this.dataset.rowId; // 'this' refers to the clicked button
-      var rowToToggle = document.getElementById(rowId);
+      var rowsToToggle = document.getElementsByClassName(rowId);
+      console.log(rowsToToggle)
 
       // Toggle the display property
       if (rowToToggle.style.display === 'none' || rowToToggle.style.display === '') {
