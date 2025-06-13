@@ -74,7 +74,7 @@
         let time = document.getElementById("time").value
         console.log(document.getElementById('type').selectedIndex)
         
-        if (document.getElementById('type').options[document.getElementById('type').selectedIndex].textContent == "Hangboard") {
+        if (document.getElementById('type').selectedIndex == 0) {
             console.log("hang")
         }else{
             console.log("pinch")
