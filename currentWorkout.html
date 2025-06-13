@@ -93,11 +93,11 @@
         
         if (document.getElementById('type').selectedIndex == 0) {
             console.log("hang")
-            localData.push(new hangboard(window.localStorage.num, time, edge, weight))
+            localData.thisSession.push(new hangboard(window.localStorage.num, time, edge, weight))
             window.localStorage.num++;
         }else{
             console.log("pinch")
-            localData.push(new pinchblock(window.localStorage.num,time, pinch, weight))
+            localData.thisSession.push(new pinchblock(window.localStorage.num,time, pinch, weight))
             window.localStorage.num++;
         }
 
