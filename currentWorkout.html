@@ -110,6 +110,7 @@
         console.log(localData)
         localData.sessions.push(JSON.parse(window.localStorage.workout).thisSession) 
         window.localStorage.sessions = JSON.stringify(localData)
+        resetSession()
         
     }
 </script>
