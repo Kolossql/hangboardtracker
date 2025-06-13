@@ -31,7 +31,6 @@
         // 3. Get the selected value and text
         const selectedValue = mySelect.value;
         const selectedText = mySelect.options[mySelect.selectedIndex].textContent;
-        // console.log(selectedText)
 
 
         if (selectedValue === 'hangboard') {
@@ -73,7 +72,7 @@
         let edge = document.getElementById("edge").value
         let pinch = document.getElementById("pinch").value
         let time = document.getElementById("time").value
-        console.log(document.getElementById('type').options[document.getElementById('type').selectedIndex].textContent)
+        console.log(document.getElementById('type').selectedIndex)
         
         if (document.getElementById('type').options[document.getElementById('type').selectedIndex].textContent == "Hangboard") {
             console.log("hang")
