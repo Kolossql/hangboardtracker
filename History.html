@@ -77,12 +77,32 @@
         let c = 10
         for (let session of sessions){
 
+            //visible row
             const controlRow = table.insertRow(-1);
             const button = controlRow.insertCell(0);
             const date = controlRow.insertCell(1);
             const expand = controlRow.insertCell(2);
-            expand.innerHTML = "Expand To See More"
+            expand.textContent = "Expand To See More"
             expand.classList.add("hidden-row", "row" + c)
+            expand.setAttribute('colspan', '3');
+            //subtitles
+            const titleRow = table.insertRow(-1);
+            const typeH = titleRow.insertCell(0);
+            typeH.textContent("Type");
+            const dateH = titleRow.insertCell(1);
+            typeH.textContent("");
+            const widthH = titleRow.insertCell(2);
+            typeH.textContent("Width");
+            const timeH = titleRow.insertCell(3);
+            typeH.textContent("Time");
+            const weightH = titleRow.insertCell(4);
+            typeH.textContent("Weight");
+
+
+
+            for (let lift of session){
+
+            }
         }
 
     });
