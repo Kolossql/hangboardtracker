@@ -9,7 +9,13 @@
         <option value="pinch block"> Pinch Block</option>..........
     </select>
     <h3 id = "changedHeading">Edge Width</h3>
-    <input id="edge" type="number" list="EdgeWidths" title="Edge">
+    <input id="edge" style="display: block" type="number" list="EdgeWidths" title="Edge">
+    <select id="pinch" style="display: none"type="number" list="EdgeWidths" title="Edge">
+        <option value="thin-wood">Thin Wood</option>
+        <option value="wide-wood">Wide Wood</option>
+        <option value="thin-metal">Thin Metal</option>
+        <option value="wide-metal">Wide Metal</option>
+    </select>
     <h3>Time</h3>
     <input id="time" type="number" list="CommonTimes" title="Time">
     <input type="button" onclick="validateForm()" value="Submit">
@@ -17,25 +23,26 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    // 1. Get references to the HTML elements
     const mySelect = document.getElementById('type');
     const displayHeading = document.getElementById('changedHeading');
 
-    // 2. Add an event listener to the select element
-    // The 'change' event fires when the user selects a new option.
+
     mySelect.addEventListener('change', function() {
         // 3. Get the selected value and text
         const selectedValue = mySelect.value;
         const selectedText = mySelect.options[mySelect.selectedIndex].textContent;
-        console.log(selectedText)
+        // console.log(selectedText)
 
-        // 4. Update the h3 element based on the selection
+
         if (selectedValue === 'hangboard') {
-            displayHeading.textContent = "Selected Fruit: -- None --";
+            displayHeading.textContent = "Edge Width";
+            document.getElementById("edge").style.display = 'block';
+            document.getElementById("pinch").style.display = 'none';
         } else {
-            displayHeading.textContent = `Selected Fruit: ${selectedText}`;
-            // Or you could use the value:
-            // displayHeading.textContent = `You chose the value: ${selectedValue}`;
+            displayHeading.textContent = "Pinch Width";
+            document.getElementById("edge").style.display = 'none';
+            document.getElementById("pinch").style.display = 'block';
+
         }
     });
 
@@ -64,6 +71,7 @@
         }
 
         let edge = document.getElementById("edge").value
+        let pinch = document.getElementById("pinch").value
         let time = document.getElementById("time").value
         console.log(document.getElementById("edge").value + " || " + document.getElementById("time").value)
         window.workouts
