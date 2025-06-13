@@ -97,6 +97,7 @@
             let workouts = [];
             try {
                 const storedWorkouts = localStorage.getItem('sessions').sessions;
+                console.log(storedWorkouts)
                 if (storedWorkouts) {
                     workouts = JSON.parse(storedWorkouts);
                 } else {
