@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Collapsible Table</title>
+<title>Collapsible Table with Individual Row Toggles</title>
 <style>
   /* Optional CSS for better appearance */
   table {
@@ -20,13 +20,13 @@
   th {
     background-color: #f2f2f2;
   }
-  .collapsible-button {
-    background-color: #4CAF50; /* Green */
+  .toggle-button {
+    background-color: #007bff; /* Blue */
     color: white;
-    padding: 10px 15px;
+    padding: 5px 10px;
     border: none;
     cursor: pointer;
-    margin-bottom: 10px;
+    font-size: 0.8em; /* Smaller button for each row */
   }
   .hidden-row {
     display: none; /* This is the key CSS for hiding */
@@ -35,61 +35,76 @@
 </head>
 <body>
 
-<h1>Simple Collapsible Table</h1>
-
-<button class="collapsible-button" onclick="toggleTableRows()">Toggle Details</button>
+<h1>Collapsible Table with Individual Row Toggles</h1>
 
 <table id="myCollapsibleTable">
   <thead>
     <tr>
-      <th>Header 1</th>
-      <th>Header 2</th>
-      <th>Header 3</th>
+      <th>Action</th> <th>Item</th>
+      <th>Description</th>
+      <th>Status</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Visible Row 1, Cell 1</td>
-      <td>Visible Row 1, Cell 2</td>
-      <td>Visible Row 1, Cell 3</td>
+      <td><button class="toggle-button" data-row-id="row1">Toggle</button></td>
+      <td>Laptop</td>
+      <td>High-performance computing device.</td>
+      <td>Available</td>
     </tr>
-    <tr class="hidden-row">
-      <td>Hidden Row 1, Cell 1</td>
-      <td>Hidden Row 1, Cell 2</td>
-      <td>Hidden Row 1, Cell 3</td>
+    <tr id="row1" class="hidden-row">
+      <td colspan="4"> <strong>Details for Laptop:</strong><br>
+        Processor: Intel i7, RAM: 16GB, Storage: 512GB SSD.
+      </td>
     </tr>
-    <tr class="hidden-row">
-      <td>Hidden Row 2, Cell 1</td>
-      <td>Hidden Row 2, Cell 2</td>
-      <td>Hidden Row 2, Cell 3</td>
+
+    <tr>
+      <td><button class="toggle-button" data-row-id="row2">Toggle</button></td>
+      <td>Smartphone</td>
+      <td>Portable communication and entertainment device.</td>
+      <td>In Stock</td>
     </tr>
-    <tr class="hidden-row">
-      <td>Hidden Row 3, Cell 1</td>
-      <td>Hidden Row 3, Cell 2</td>
-      <td>Hidden Row 3, Cell 3</td>
+    <tr id="row2" class="hidden-row">
+      <td colspan="4">
+        <strong>Details for Smartphone:</strong><br>
+        Screen Size: 6.1 inches, Camera: 48MP, Battery: 4000mAh.
+      </td>
+    </tr>
+
+    <tr>
+      <td><button class="toggle-button" data-row-id="row3">Toggle</button></td>
+      <td>Monitor</td>
+      <td>External display for computers.</td>
+      <td>Low Stock</td>
+    </tr>
+    <tr id="row3" class="hidden-row">
+      <td colspan="4">
+        <strong>Details for Monitor:</strong><br>
+        Size: 27 inches, Resolution: 4K, Refresh Rate: 144Hz.
+      </td>
     </tr>
   </tbody>
 </table>
 
 <script>
-  function toggleTableRows() {
-    // Get all elements with the class 'hidden-row'
-    var rowsToToggle = document.querySelectorAll('.hidden-row');
+  // Get all toggle buttons
+  var toggleButtons = document.querySelectorAll('.toggle-button');
 
-    // Loop through each of these rows
-    for (var i = 0; i < rowsToToggle.length; i++) {
-      var currentRow = rowsToToggle[i];
+  // Loop through each button and attach an event listener
+  toggleButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      // Get the ID of the row to toggle from the data-row-id attribute
+      var rowId = this.dataset.rowId; // 'this' refers to the clicked button
+      var rowToToggle = document.getElementById(rowId);
 
-      // Check the current display style
-      if (currentRow.style.display === 'none' || currentRow.style.display === '') {
-        // If it's hidden or not set, show it
-        currentRow.style.display = 'table-row'; // Use 'table-row' for table rows
+      // Toggle the display property
+      if (rowToToggle.style.display === 'none' || rowToToggle.style.display === '') {
+        rowToToggle.style.display = 'table-row';
       } else {
-        // Otherwise, hide it
-        currentRow.style.display = 'none';
+        rowToToggle.style.display = 'none';
       }
-    }
-  }
+    });
+  });
 </script>
 
 </body>
