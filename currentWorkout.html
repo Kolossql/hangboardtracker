@@ -69,6 +69,8 @@
             }
         }
 
+        let localData = JSON.parse(window.localStorage.workouts)
+
         let edge = document.getElementById("edge").value
         let pinch = document.getElementById("pinch").selectedIndex
         let time = document.getElementById("time").value
@@ -76,10 +78,10 @@
         
         if (document.getElementById('type').selectedIndex == 0) {
             console.log("hang")
-            window.localStorage.workouts.push(new hangboard(time, edge))
+            localData.push(new hangboard(time, edge))
         }else{
             console.log("pinch")
-            window.localStorage.workouts.push(new pinchblock(time, pinch))
+            localData.push(new pinchblock(time, pinch))
         }
         // window.workouts
     }
