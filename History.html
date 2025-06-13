@@ -72,7 +72,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         let sessions = JSON.parse(window.localStorage.sessions)
-        table = document.getElementByID("myCollapsibleTable")
+        table = document.getElementById("myCollapsibleTable")
+        
+        for (let session of sessions){
+            const controlRow = table.insertRow(-1);
+            const button = controlRow.insertCell(0);
+        }
 
     });
 
