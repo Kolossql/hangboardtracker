@@ -118,6 +118,11 @@
         resetSession()
         
     }
+    function wipeData(){
+        localStorage.clear()
+        localStorage.sessions = JSON.stringify({sessions: []})
+        resetSession()
+    }
 </script>
 
 <datalist id="EdgeWidths">
