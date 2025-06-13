@@ -76,10 +76,7 @@
         // However, in this case, our default option is already handled.
     });
     function resetSession(){
-        let localData = JSON.parse(window.localStorage.workout)
-        localData.thisSession = JSON.strin
-        localData.num = 0
-        window.localStorage.workout = workoutJSON.stringify({thisSession: [], num: 0})
+        window.localStorage.workout = JSON.stringify({thisSession: [], num: 0})
     }
     function addLift() {
 
@@ -94,11 +91,11 @@
         if (document.getElementById('type').selectedIndex == 0) {
             console.log("hang")
             localData.thisSession.push(new hangboard(window.localStorage.num, time, edge, weight))
-            window.localStorage.thisSession.num++;
+            window.localStorage.woprkout.num++;
         }else{
             console.log("pinch")
             localData.thisSession.push(new pinchblock(window.localStorage.num,time, pinch, weight))
-            window.localStorage.thisSession.num++;
+            window.localStorage.woprkout.num++;
         }
 
         window.localStorage.workout = JSON.stringify(localData)
