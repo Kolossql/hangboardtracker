@@ -45,27 +45,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td><button class="toggle-button" data-row-id="row1">Toggle</button></td>
-      <td>6/13/2025</td>
-      <td colspan ="3">Expand To See More</td>
-    </tr>
-    <tr class="hidden-row row1">
-        <td colspan="1"> 
-        <strong>Type</strong>
-        </td>
-        <td></td>
-        <td> <strong>Width</strong></td>
-        <td> <strong>Time</strong></td>
-        <td> <strong>Weight</strong></td>
-    </tr>
-    <tr class="hidden-row row1">
-        <td colspan="1">hang</td>
-        <td>6/13/2025</td>
-        <td> 20 mm</td>
-        <td> 10 sec</td>
-        <td> 50 lbs</td>
-    </tr>
+    
   </tbody>
 </table>
 
@@ -74,7 +54,7 @@
         let sessions = JSON.parse(window.localStorage.sessions).sessions
         console.log(sessions)
         table = document.getElementById("myCollapsibleTable")
-        let c = 10
+        let c = 1
         for (let session of sessions){
 
             //visible row
@@ -87,6 +67,7 @@
             button.textContent = "Toggle";
             buttoncell.appendChild( button);
             date = controlRow.insertCell(1);
+            date.textContent = session.shift();
             detail = controlRow.insertCell(2);
             detail.textContent = "Expand To See More"
             detail.setAttribute('colspan', '3');
@@ -128,12 +109,11 @@
                     width.textContent = lift.edge + "mm"
                 }else{
                     switch (lift.width) {
-                        case 0: "Thin-Wood";break;
-                        case 0: "Wide-Wood";break;
-                        case 0: "Thin-Metal";break;
-                        case 0: "Wide-Metal";break;
+                        case 0: width.textContent ="Thin Wood";break;
+                        case 1: width.textContent ="Wide Wood";break;
+                        case 2: width.textContent ="Thin Metal";break;
+                        case 3: width.textContent ="Wide Metal";break;
                     }
-                    width.textContent = lift.width //CHANGE TO PINCH TYPE
                 }
 
                 timeH = liftRow.insertCell(3);

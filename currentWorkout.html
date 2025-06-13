@@ -108,7 +108,12 @@
     function completeSession() {
         let localData = JSON.parse(window.localStorage.sessions)
         console.log(localData)
-        localData.sessions.push(JSON.parse(window.localStorage.workout).thisSession) 
+        let workout = JSON.parse(window.localStorage.workout)
+        console.log(workout.thisSession)
+        let currentdate = new Date();
+        workout.thisSession.unshift(currentdate.getMonth()+"/" +currentdate.getDate()+"/"+currentdate.getFullYear());
+        console.log(workout.thisSession)
+        localData.sessions.push(workout.thisSession) 
         window.localStorage.sessions = JSON.stringify(localData)
         resetSession()
         
