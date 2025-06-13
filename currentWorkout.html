@@ -22,7 +22,7 @@
     <h3>Weight</h3>
     <input id="weight" type="number"  title="Weight">
     <input type="button" onclick="addLift()" value="Add lift">
-    <input type="button" onclick="validateForm()" value="Complete Session">
+    <input type="button" onclick="completeSession()" value="Complete Session">
 </form>
 
 <script>
@@ -104,6 +104,10 @@
         }
 
         window.localStorage.workout = JSON.stringify(localData)
+    }
+    function completeSession() {
+        let localData = JSON.parse(window.localStorage.sessions)
+        localData.sessions.push(window.localStorage.workout.thisSession) 
     }
 </script>
 
