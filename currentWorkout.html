@@ -73,7 +73,8 @@
         let edge = document.getElementById("edge").value
         let pinch = document.getElementById("pinch").value
         let time = document.getElementById("time").value
-        console.log(document.getElementById("edge").value + " || " + document.getElementById("time").value)
+        console.log(document.getElementById('type').options[document.getElementById('type').selectedIndex].textContent)
+        
         if (document.getElementById('type').options[document.getElementById('type').selectedIndex].textContent == "hangboard") {
             console.log("hang")
         }else{
