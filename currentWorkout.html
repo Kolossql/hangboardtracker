@@ -75,27 +75,33 @@
         // to reflect the initial state of the select element.
         // However, in this case, our default option is already handled.
     });
+    function resetSession(){
+        let localData = JSON.parse(window.localStorage.workouts)
+        localData.thisSession = []
+        localData.num = 0
+        window.localStorage.thisSession = JSON.stringify(localData)
+    }
     function addLift() {
 
         let localData = JSON.parse(window.localStorage.workouts)
         console.log(localData)
-        let edge = document.getElementById("edge").value
-        let pinch = document.getElementById("pinch").selectedIndex
-        let time = document.getElementById("time").value
-        let weight = document.getElementById("weight").value
+        let edge = parseInt(document.getElementById("edge").value)
+        let pinch = document.getElementById("pinch").selectedInde
+        let time = parseInt(document.getElementById("time").value)
+        let weight = parseInt(document.getElementById("weight").value)
         console.log(document.getElementById('type').selectedIndex)
         
         if (document.getElementById('type').selectedIndex == 0) {
             console.log("hang")
-            localData.workouts.push(new hangboard(localData.num + 1, time, edge, weight))
+            localData.thisSession.push(new hangboard(localData.num, time, edge, weight))
             localData.num++;
         }else{
             console.log("pinch")
-            localData.workouts.push(new pinchblock(localData.num + 1,time, pinch, weight))
+            localData.thisSession.push(new pinchblock(localData.num,time, pinch, weight))
             localData.num++;
         }
 
-        window.localStorage.workouts = JSON.stringify(localData)
+        window.localStorage.thisSession = JSON.stringify(localData)
     }
 </script>
 
