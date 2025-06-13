@@ -86,7 +86,7 @@
         let pinch = document.getElementById("pinch").selectedIndex
         let time = parseInt(document.getElementById("time").value)
         let weight = parseInt(document.getElementById("weight").value)
-        console.log(document.getElementById('type').selectedIndex)
+        console.log(window.localStorage.workout.num)
         
         if (document.getElementById('type').selectedIndex == 0) {
             console.log("hang")
