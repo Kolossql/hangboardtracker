@@ -51,6 +51,12 @@
         // However, in this case, our default option is already handled.
     });
     function validateForm() {
+        // class session{
+        //     constructor(){
+
+        //     }
+        // }
+
         class workout{
             constructor(t, n, lbs){
                 this.weight = lbs
@@ -82,11 +88,11 @@
         
         if (document.getElementById('type').selectedIndex == 0) {
             console.log("hang")
-            localData.workouts.push(new hangboard(localData.num + 1, time, edge))
+            localData.workouts.push(new hangboard(localData.num + 1, time, edge, 50))
             localData.num++;
         }else{
             console.log("pinch")
-            localData.workouts.push(new pinchblock(localData.num + 1,time, pinch))
+            localData.workouts.push(new pinchblock(localData.num + 1,time, pinch, 50))
             localData.num++;
         }
 
