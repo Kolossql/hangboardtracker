@@ -82,12 +82,13 @@
       console.log(rowsToToggle)
 
       // Toggle the display property
-      rowsToToggle.forEach(rowToToggle => {console.log(rowToToggle);
+      for (let rowToToggle of rowsToToggle) {
+        console.log(rowToToggle);
       if (rowToToggle.style.display === 'none' || rowToToggle.style.display === '') {
         rowToToggle.style.display = 'table-row';
       } else {
         rowToToggle.style.display = 'none';
-      }})
+      }}
     });
   });
 </script>
