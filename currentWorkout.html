@@ -108,6 +108,8 @@
     function completeSession() {
         let localData = JSON.parse(window.localStorage.sessions)
         localData.sessions.push(window.localStorage.workout.thisSession) 
+        window.localStorage.sessions = JSON.stringify(localData)
+        
     }
 </script>
 
