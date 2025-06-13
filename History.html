@@ -79,59 +79,99 @@
 
             //visible row
             const controlRow = table.insertRow(-1);
-            button = controlRow.insertCell(0);
+            buttoncell = controlRow.insertCell(0);
+            button = document.createElement('button');
             // <button class="toggle-button" data-row-id="row1">Toggle</button>
             button.classList.add("toggle-button")
             button.setAttribute("data-row-id", "row"+c)
+            button.textContent = "Toggle";
+            buttoncell.appendChild( button);
             date = controlRow.insertCell(1);
             detail = controlRow.insertCell(2);
             detail.textContent = "Expand To See More"
             detail.setAttribute('colspan', '3');
             //subtitles
-            const titleRow = table.insertRow(-1);
-            const typeH = titleRow.insertCell(0);
-            typeH.textContent("Type");
-            const dateH = titleRow.insertCell(1);
-            typeH.textContent("");
-            const widthH = titleRow.insertCell(2);
-            typeH.textContent("Width");
-            const timeH = titleRow.insertCell(3);
-            typeH.textContent("Time");
-            const weightH = titleRow.insertCell(4);
-            typeH.textContent("Weight");
+            titleRow = table.insertRow(-1);
+            titleRow.classList.add("hidden-row")
+            titleRow.classList.add("row"+c)
+
+            typeH = titleRow.insertCell(0);
+            typeH.textContent = "Type";
+
+            dateH = titleRow.insertCell(1);
+
+            widthH = titleRow.insertCell(2);
+            widthH.textContent = "Width";
+
+            timeH = titleRow.insertCell(3);
+            timeH.textContent = "Time";
+
+            weightH = titleRow.insertCell(4);
+            weightH.textContent = "Weight";
             //
 
 
             for (let lift of session){
+                console.log(lift)
+                //liftRow
+                liftRow = table.insertRow(-1);
+                liftRow.classList.add("hidden-row")
+                liftRow.classList.add("row"+c)
 
+                type = liftRow.insertCell(0);
+                type.textContent = lift.type == "h" ? "Hangboard" : "Pinch Block" 
+
+                date = liftRow.insertCell(1);
+
+                width = liftRow.insertCell(2);
+                if (lift.type == "h") {
+                    width.textContent = lift.edge + "mm"
+                }else{
+                    switch (lift.width) {
+                        case 0: "Thin-Wood";break;
+                        case 0: "Wide-Wood";break;
+                        case 0: "Thin-Metal";break;
+                        case 0: "Wide-Metal";break;
+                    }
+                    width.textContent = lift.width //CHANGE TO PINCH TYPE
+                }
+
+                timeH = liftRow.insertCell(3);
+                timeH.textContent = lift.time + "sec"
+
+                weightH = liftRow.insertCell(4);
+                weightH.textContent = (lift.type == "h" ? "BW+" : "" )+ lift.weight + "lbs"
             }
 
             c++;
         }
 
+
+        // attachListeners
+        // Get all toggle buttons
+        var toggleButtons = document.querySelectorAll('.toggle-button');
+        console.log(toggleButtons)
+        // Loop through each button and attach an event listener
+        toggleButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+            // Get the ID of the row to toggle from the data-row-id attribute
+            var rowId = this.dataset.rowId; // 'this' refers to the clicked button
+            var rowsToToggle = document.getElementsByClassName(rowId);
+            console.log(rowsToToggle)
+
+            // Toggle the display property
+            for (let rowToToggle of rowsToToggle) {
+                console.log(rowToToggle);
+            if (rowToToggle.style.display === 'none' || rowToToggle.style.display === '') {
+                rowToToggle.style.display = 'table-row';
+            } else {
+                rowToToggle.style.display = 'none';
+            }}
+            });
+        });
     });
 
-  // Get all toggle buttons
-  var toggleButtons = document.querySelectorAll('.toggle-button');
-
-  // Loop through each button and attach an event listener
-  toggleButtons.forEach(function(button) {
-    button.addEventListener('click', function() {
-      // Get the ID of the row to toggle from the data-row-id attribute
-      var rowId = this.dataset.rowId; // 'this' refers to the clicked button
-      var rowsToToggle = document.getElementsByClassName(rowId);
-      console.log(rowsToToggle)
-
-      // Toggle the display property
-      for (let rowToToggle of rowsToToggle) {
-        console.log(rowToToggle);
-      if (rowToToggle.style.display === 'none' || rowToToggle.style.display === '') {
-        rowToToggle.style.display = 'table-row';
-      } else {
-        rowToToggle.style.display = 'none';
-      }}
-    });
-  });
+  
 </script>
 
 </body>
