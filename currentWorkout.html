@@ -83,10 +83,10 @@
     }
     function addLift() {
 
-        let localData = JSON.parse(window.localStorage.workouts)
+        let localData = JSON.parse(window.localStorage.workout)
         console.log(localData)
         let edge = parseInt(document.getElementById("edge").value)
-        let pinch = document.getElementById("pinch").selectedInde
+        let pinch = document.getElementById("pinch").selectedIndex
         let time = parseInt(document.getElementById("time").value)
         let weight = parseInt(document.getElementById("weight").value)
         console.log(document.getElementById('type').selectedIndex)
