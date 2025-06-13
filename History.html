@@ -70,6 +70,11 @@
 </table>
 
 <script>
+    function onload(){
+        let sessions = JSON.parse(window.localStorage.sessions)
+        console.log(sessions)
+    }
+
   // Get all toggle buttons
   var toggleButtons = document.querySelectorAll('.toggle-button');
 
