@@ -96,13 +96,13 @@
             // Get workouts from localStorage or use sample data
             let workouts = [];
             try {
-                const storedWorkouts = localStorage.getItem('workoutSessions');
+                const storedWorkouts = localStorage.getItem('sessions').sessions;
                 if (storedWorkouts) {
                     workouts = JSON.parse(storedWorkouts);
                 } else {
                     // If no data, use sample data and save it to localStorage
                     workouts = sampleWorkouts;
-                    localStorage.setItem('workoutSessions', JSON.stringify(sampleWorkouts));
+                    // localStorage.setItem('workoutSessions', JSON.stringify(sampleWorkouts));
                 }
             } catch (e) {
                 console.error("Failed to parse workout data from localStorage, using sample data:", e);
