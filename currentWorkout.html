@@ -2,7 +2,8 @@
 <a class = "buttton" href = "Statistics.html">Statistics</a>
 <a class = "buttton"href = "History.html">History</a>
 
-<form onsubmit="return validateForm()">
+<form">
+    <input type="button" onclick="validateForm()" value="Reset Session">
     <h3>Workout Type</h3>
     <select id="type"> <!--This field submitted successfully -->
         <option value="hangboard"> Hangboard </option>
@@ -18,10 +19,34 @@
     </select>
     <h3>Time</h3>
     <input id="time" type="number" list="CommonTimes" title="Time">
-    <input type="button" onclick="validateForm()" value="Submit">
+    <h3>Weight</h3>
+    <input id="weight" type="number"  title="Weight">
+    <input type="button" onclick="addLift()" value="Add lift">
+    <input type="button" onclick="validateForm()" value="Complete Session">
 </form>
 
 <script>
+    class workout{
+        constructor(t, n, lbs){
+            this.weight = lbs
+            this.id = n
+            this.time = t
+        }
+    }
+    class hangboard extends workout{
+        constructor(n, t, e ,lbs ){
+            super(t, n, lbs)
+            this.type = "h"
+            this.edge = e
+        }
+    }
+    class pinchblock extends workout{
+        constructor(n, t, w, lbs){
+            super(t, n, lbs)
+            this.type = "p"
+            this.width = w
+        }
+    }
     document.addEventListener('DOMContentLoaded', function() {
     const mySelect = document.getElementById('type');
     const displayHeading = document.getElementById('changedHeading');
@@ -50,54 +75,27 @@
         // to reflect the initial state of the select element.
         // However, in this case, our default option is already handled.
     });
-    function validateForm() {
-        // class session{
-        //     constructor(){
-
-        //     }
-        // }
-
-        class workout{
-            constructor(t, n, lbs){
-                this.weight = lbs
-                this.id = n
-                this.time = t
-            }
-        }
-        class hangboard extends workout{
-            constructor(n, t, e ,lbs ){
-                super(t, n, lbs)
-                this.type = "h"
-                this.edge = e
-            }
-        }
-        class pinchblock extends workout{
-            constructor(n, t, w, lbs){
-                super(t, n, lbs)
-                this.type = "p"
-                this.width = w
-            }
-        }
+    function addLift() {
 
         let localData = JSON.parse(window.localStorage.workouts)
         console.log(localData)
         let edge = document.getElementById("edge").value
         let pinch = document.getElementById("pinch").selectedIndex
         let time = document.getElementById("time").value
+        let weight = document.getElementById("weight").value
         console.log(document.getElementById('type').selectedIndex)
         
         if (document.getElementById('type').selectedIndex == 0) {
             console.log("hang")
-            localData.workouts.push(new hangboard(localData.num + 1, time, edge, 50))
+            localData.workouts.push(new hangboard(localData.num + 1, time, edge, weight))
             localData.num++;
         }else{
             console.log("pinch")
-            localData.workouts.push(new pinchblock(localData.num + 1,time, pinch, 50))
+            localData.workouts.push(new pinchblock(localData.num + 1,time, pinch, weight))
             localData.num++;
         }
 
         window.localStorage.workouts = JSON.stringify(localData)
-        // window.workouts
     }
 </script>
 
