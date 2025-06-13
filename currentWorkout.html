@@ -52,19 +52,22 @@
     });
     function validateForm() {
         class workout{
-            constructor(t){
+            constructor(t, n){
+                this.id = 
                 this.time = t
             }
         }
         class hangboard extends workout{
-            constructor(t, e){
-                super(t)
+            constructor(n, t, e){
+                super(t, n)
+                this.type = "h"
                 this.edge = e
             }
         }
         class pinchblock extends workout{
-            constructor(t,w){
-                super(t)
+            constructor(n, t, w){
+                super(t, n)
+                this.type = "p"
                 this.width = w
             }
         }
@@ -78,10 +81,12 @@
         
         if (document.getElementById('type').selectedIndex == 0) {
             console.log("hang")
-            localData.workouts.push(new hangboard(time, edge))
+            localData.workouts.push(new hangboard(localData.num + 1, time, edge))
+            localData.num++;
         }else{
             console.log("pinch")
-            localData.workouts.push(new pinchblock(time, pinch))
+            localData.workouts.push(new pinchblock(localData.num + 1,time, pinch))
+            localData.num++;
         }
 
         window.localStorage.workouts = JSON.stringify(localData)
