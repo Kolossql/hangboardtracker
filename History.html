@@ -96,7 +96,7 @@
             // Get workouts from localStorage or use sample data
             let workouts = [];
             try {
-                const storedWorkouts = localStorage.getItem('sessions').sessions;
+                const storedWorkouts = localStorage.getItem('sessions');
                 console.log(storedWorkouts)
                 if (storedWorkouts) {
                     workouts = JSON.parse(storedWorkouts);
