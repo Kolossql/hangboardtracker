@@ -1,3 +1,29 @@
-<a class = "buttton">Current Workout</a>
+<a class = "buttton" >Current Workout</a>
 <a class = "buttton" href = "Statistics.html">Statistics</a>
 <a class = "buttton"href = "History.html">History</a>
+
+<form onsubmit="return validateForm()">
+    <h3>Edge Width</h3>
+    <input type="number" list="EdgeWidths" title="Edge">
+    <h3>Time</h3>
+    <input type="number" list="CommonTimes" title="Time">
+    <input type="submit">
+</form>
+
+<script>
+    function validateForm() {
+        // Perform your JavaScript logic here, e.g., client-side validation
+        console.log("hi")
+    }
+</script>
+
+<datalist id="EdgeWidths">
+    <option value="8">
+    <option value="10">
+    <option value="15">
+</datalist>
+<datalist id="CommonTimes">
+    <option value="5">
+    <option value="8">
+    <option value="10">
+</datalist>
