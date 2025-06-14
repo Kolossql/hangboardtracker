@@ -1,17 +1,42 @@
 <link rel="manifest" href="manifest.json" />
 
-<a class = "buttton" >Current Workout</a>
-<a class = "buttton" href = "Statistics.html">Statistics</a>
-<a class = "buttton"href = "History.html">History</a>
+<a class = "buttton" width="33%">Current Workout</a>
+<a class = "buttton" href = "Statistics.html" width="33%">Statistics</a>
+<a class = "buttton" href = "History.html" width="33%">History</a>
+<style>
+form  { display: table;      }
+p     { display: table-row;  }
+label { display: table-cell; }
+input { display: table-cell; }
+.fullscreenbutton {
+        display:"block";
+        width:100%;
+        padding:5px;
+        margin: 5px;
+        border-radius: 5px;
+}
+.titletxt{
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+    font-size: x-large;
+    display:block;
+}
+.labeltxt{
+    font-size:large;
+    text-align: left;
+}
 
-<form">
+</style>
+
+<form style="align-items: left;">
     <input type="button" onclick="resetSession()" value="Reset Session">
-    <h3>Workout Type</h3>
+    <hp class="titletxt">Workout Type</p>
     <select id="type"> <!--This field submitted successfully -->
         <option value="hangboard"> Hangboard </option>
         <option value="pinch block"> Pinch Block</option>..........
     </select>
-    <h3 id = "changedHeading">Edge Width</h3>
+    <label class="labeltxt" id = "changedHeading">Edge Width</p>
     <input id="edge" style="display: block" type="number" list="EdgeWidths" title="Edge">
     <select id="pinch" style="display: none"type="number" list="EdgeWidths" title="Edge">
         <option value="thin-wood">Thin Wood</option>
@@ -19,12 +44,13 @@
         <option value="thin-metal">Thin Metal</option>
         <option value="wide-metal">Wide Metal</option>
     </select>
-    <h3>Time</h3>
+    <label class="labeltxt">Time</p>
     <input id="time" type="number" list="CommonTimes" title="Time">
-    <h3>Weight</h3>
+    <label class="labeltxt">Weight</p>
     <input id="weight" type="number"  title="Weight">
-    <input type="button" onclick="addLift()" value="Add lift">
-    <input type="button" onclick="completeSession()" value="Complete Session">
+    <input class="fullscreenbutton" type="button" onclick="addLift()" value="Add lift">
+    </div>
+    <input class="fullscreenbutton" type="button" onclick="completeSession()" value="Complete Session">
 </form>
 
 <script>
