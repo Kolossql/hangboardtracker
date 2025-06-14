@@ -1,230 +1,394 @@
-<link rel="manifest" href="manifest.json" />
-
-<style>
-    form  { display: table;      }
-    p     { display: table-row;  }
-    label { display: table-cell; }
-    input { display: table-cell; }
-    .nav-container {
-            height: 20%; /* Corrected typo: "300 px" to "300px" */
-            width: 100%; /* Ensure the container itself takes full width */
-            display: flex; /* Makes this div a flex container */
-            justify-content: space-around; /* Distributes items with space around them */
-            /* Alternatively, use justify-content: space-between; for items pushed to ends with space between */
-            /* Or justify-content: stretch; if you want items to stretch to fill remaining space */
-            align-items: stretch; /* Makes children stretch to fill the height of the container */
-            overflow: hidden; /* Ensures rounded corners apply to children if they extend */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top:10px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Tracker</title>
+    <link rel="manifest" href="manifest.json" />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the Inter font and to ensure full height */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-    .navbutton {
-        width:20%;
-        height:15%;
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #4c66af;
-        color: white;
-        text-align: center;
-        text-decoration: none;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
 
-    .navbutton:hover {
-        background-color: #4c66af9b;
-        color:black
-    }
-    .fullscreenbutton {
-        display:"block";
-        width:100%;
-        height: 15%;
-        padding-top:5px;
-        padding-bottom:5px;
-        margin: 5px;
-        border-radius: 5px;
-    }
-    .titletxt{
-        width: 100%;
-        margin-top: 10px;
-        text-align: center;
-        font-size: x-large;
-        display:block;
-    }
-    .labeltxt{
-        font-size:large;
-        text-align: left;
-    }
-.header {
-    height: 40px;
-    background-color: red;
-}
-
-.mainBody {
-    background-color: yellow;
-    position: absolute;
-    top: 40px;
-    bottom: 20px;
-    width:100%;
-    flex-direction: column;
-    align-content: space-evenly;
-}
-
-.content {
-    color:#fff;
-}
-
-.footer {
-    height: 20px;
-    background-color: blue;
-    
-    position: absolute;
-    bottom: 0;
-    width:100%;
-}
-    
-</style>
-<div class="header">
-
-</div>
-<div class="mainBody">
-    <!-- <div class="nav-container"> -->
-    <a class = "navbutton" >Current Workout</a>
-    <a class = "navbutton" href = "Statistics.html" >Statistics</a>
-    <a class = "navbutton" href = "History.html">History</a>
-    <!-- </div> -->
-
-    <form style="align-items: left;">
-        <input class="fullscreenbutton" type="button" onclick="resetSession()" value="Reset Session">
-        <hp class="titletxt">Workout Type</p>
-        <select id="type"> <!--This field submitted successfully -->
-            <option value="hangboard"> Hangboard </option>
-            <option value="pinch block"> Pinch Block</option>..........
-        </select>
-        <label class="labeltxt" id = "changedHeading">Edge Width</p>
-        <input id="edge" style="display: block" type="number" list="EdgeWidths" title="Edge">
-        <select id="pinch" style="display: none"type="number" list="EdgeWidths" title="Edge">
-            <option value="thin-wood">Thin Wood</option>
-            <option value="wide-wood">Wide Wood</option>
-            <option value="thin-metal">Thin Metal</option>
-            <option value="wide-metal">Wide Metal</option>
-        </select>
-        <label class="labeltxt">Time</p>
-        <input id="time" type="number" list="CommonTimes" title="Time">
-        <label class="labeltxt">Weight</p>
-        <input id="weight" type="number"  title="Weight">
-        <input  class="fullscreenbutton" type="button" onclick="addLift()" value="Add lift">
-        <input class="fullscreenbutton" type="button" onclick="completeSession()" value="Complete Session">
-    </form>
-</div>
-<script>
-    class workout{
-        constructor(t, n, lbs){
-            this.weight = lbs
-            this.id = n
-            this.time = t
+        /* Ensure the body and html take full height */
+        html, body {
+            height: 100%;
         }
-    }
-    class hangboard extends workout{
-        constructor(n, t, e ,lbs ){
-            super(t, n, lbs)
-            this.type = "h"
-            this.edge = e
+
+        /* Styling for table-like form layout */
+        .form-table {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 1rem; /* Vertical spacing between rows */
         }
-    }
-    class pinchblock extends workout{
-        constructor(n, t, w, lbs){
-            super(t, n, lbs)
-            this.type = "p"
-            this.width = w
+
+        .form-row {
+            display: table-row;
         }
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-    const mySelect = document.getElementById('type');
-    const displayHeading = document.getElementById('changedHeading');
 
-
-    mySelect.addEventListener('change', function() {
-        // 3. Get the selected value and text
-        const selectedValue = mySelect.value;
-        const selectedText = mySelect.options[mySelect.selectedIndex].textContent;
-
-
-        if (selectedValue === 'hangboard') {
-            displayHeading.textContent = "Edge Width";
-            document.getElementById("edge").style.display = 'block';
-            document.getElementById("pinch").style.display = 'none';
-        } else {
-            displayHeading.textContent = "Pinch Width";
-            document.getElementById("edge").style.display = 'none';
-            document.getElementById("pinch").style.display = 'block';
-
+        .form-label-cell {
+            display: table-cell;
+            vertical-align: middle;
+            padding-right: 1rem; /* Space between label and input */
         }
-    });
 
-        // Optional: Set initial state if needed
-        // You might want to call the update logic once when the page loads
-        // to reflect the initial state of the select element.
-        // However, in this case, our default option is already handled.
-    });
-    function onload(){
-        document.getElementById('changedHeading').textContent = "Edge Width";
-        document.getElementById("edge").style.display = 'block';
-        document.getElementById("pinch").style.display = 'none';
-    }
-    function resetSession(){
-        window.localStorage.workout = JSON.stringify({thisSession: [], num: 0})
-    }
-    function addLift() {
+        .form-input-cell {
+            display: table-cell;
+            vertical-align: middle;
+        }
 
-        let localData = JSON.parse(window.localStorage.workout)
-        console.log(localData)
-        let edge = parseInt(document.getElementById("edge").value)
-        let pinch = document.getElementById("pinch").selectedIndex
-        let time = parseInt(document.getElementById("time").value)
-        let weight = parseInt(document.getElementById("weight").value)
-        console.log(window.localStorage.workout.num)
-        
-        if (document.getElementById('type').selectedIndex == 0) {
-            console.log("hang")
-            localData.thisSession.push(new hangboard(localData.num, time, edge, weight))
+        /* Hide number input arrows */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100" onload="onload()">
+
+    <!-- Custom Modal Structure -->
+    <div id="customModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+            <h3 id="modalTitle" class="text-xl font-bold mb-4 text-gray-800"></h3>
+            <p id="modalMessage" class="text-gray-700 mb-6"></p>
+            <div id="modalButtons" class="flex justify-end space-x-3">
+                <!-- Buttons will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="flex items-center justify-around h-16 w-full bg-indigo-700 shadow-md flex-shrink-0">
+        <a class="navbutton flex-1 flex items-center justify-center py-3 text-white text-lg font-semibold hover:bg-indigo-600 transition-colors duration-300 rounded-tl-lg rounded-bl-lg" href="index.html">Current Workout</a>
+        <a class="navbutton flex-1 flex items-center justify-center py-3 text-white text-lg font-semibold hover:bg-indigo-600 transition-colors duration-300" href="Statistics.html">Statistics</a>
+        <a class="navbutton flex-1 flex items-center justify-center py-3 text-white text-lg font-semibold hover:bg-indigo-600 transition-colors duration-300 rounded-tr-lg rounded-br-lg" href="History.html">History</a>
+    </header>
+
+    <!-- Main Body Section -->
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        <form class="bg-white p-6 rounded-lg shadow-xl w-full max-w-xl sm:max-w-2xl">
+            <input type="button" onclick="resetSession()" value="Reset Session" class="fullscreenbutton bg-red-500 hover:bg-red-600">
+
+            <p class="titletxt text-2xl font-extrabold text-gray-800 text-center mb-6">Workout Type</p>
+            <div class="form-row">
+                <div class="form-label-cell">
+                    <label for="type" class="labeltxt text-lg font-medium text-gray-700">Type</label>
+                </div>
+                <div class="form-input-cell">
+                    <select id="type" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <option value="hangboard">Hangboard</option>
+                        <option value="pinch block">Pinch Block</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-label-cell">
+                    <label id="changedHeading" class="labeltxt text-lg font-medium text-gray-700">Edge Width</label>
+                </div>
+                <div class="form-input-cell">
+                    <input id="edge" type="number" list="EdgeWidths" title="Edge" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <select id="pinch" style="display: none;" title="Pinch Type" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <option value="thin-wood">Thin Wood</option>
+                        <option value="wide-wood">Wide Wood</option>
+                        <option value="thin-metal">Thin Metal</option>
+                        <option value="wide-metal">Wide Metal</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-label-cell">
+                    <label for="time" class="labeltxt text-lg font-medium text-gray-700">Time</label>
+                </div>
+                <div class="form-input-cell">
+                    <input id="time" type="number" list="CommonTimes" title="Time" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-label-cell">
+                    <label for="weight" class="labeltxt text-lg font-medium text-gray-700">Weight</label>
+                </div>
+                <div class="form-input-cell">
+                    <input id="weight" type="number" title="Weight" class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                </div>
+            </div>
+            
+            <input type="button" onclick="addLift()" value="Add lift" class="fullscreenbutton bg-indigo-500 hover:bg-indigo-600">
+            <input type="button" onclick="completeSession()" value="Complete Session" class="fullscreenbutton bg-green-500 hover:bg-green-600">
+            <input type="button" onclick="wipeData()" value="Wipe All Data" class="fullscreenbutton bg-gray-500 hover:bg-gray-600">
+        </form>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="h-10 w-full bg-indigo-700 flex items-center justify-center text-white text-sm flex-shrink-0">
+    </footer>
+
+    <script>
+        // Workout data classes
+        class workout {
+            constructor(t, n, lbs) {
+                this.weight = lbs;
+                this.id = n;
+                this.time = t;
+            }
+        }
+        class hangboard extends workout {
+            constructor(n, t, e, lbs) {
+                super(t, n, lbs);
+                this.type = "h";
+                this.edge = e;
+            }
+        }
+        class pinchblock extends workout {
+            constructor(n, t, w, lbs) {
+                super(t, n, lbs);
+                this.type = "p";
+                this.width = w;
+            }
+        }
+
+        // --- Custom Modal Logic ---
+        const customModal = document.getElementById('customModal');
+        const modalContent = document.getElementById('modalContent');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalButtons = document.getElementById('modalButtons');
+
+        function showModal(title, message, buttons) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modalButtons.innerHTML = ''; // Clear previous buttons
+
+            buttons.forEach(buttonInfo => {
+                const button = document.createElement('button');
+                button.textContent = buttonInfo.text;
+                button.className = `px-4 py-2 rounded-md transition-colors duration-200 ${buttonInfo.isPrimary ? 'bg-indigo-500 text-white hover:bg-indigo-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`;
+                button.onclick = () => {
+                    hideModal();
+                    if (buttonInfo.onClick) {
+                        buttonInfo.onClick();
+                    }
+                };
+                modalButtons.appendChild(button);
+            });
+
+            customModal.classList.remove('hidden');
+            // Animate modal entry
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10); // Small delay to allow 'hidden' to apply first
+        }
+
+        function hideModal() {
+            // Animate modal exit
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                customModal.classList.add('hidden');
+            }, 300); // Match CSS transition duration
+        }
+
+        function showAlert(message, title = "Info") {
+            showModal(title, message, [{ text: "OK", isPrimary: true }]);
+        }
+
+        function showConfirm(message, onConfirm, onCancel, title = "Confirm Action") {
+            showModal(title, message, [
+                { text: "Cancel", onClick: onCancel },
+                { text: "Confirm", isPrimary: true, onClick: onConfirm }
+            ]);
+        }
+        // --- End Custom Modal Logic ---
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const mySelect = document.getElementById('type');
+            const displayHeading = document.getElementById('changedHeading');
+            const edgeInput = document.getElementById("edge");
+            const pinchSelect = document.getElementById("pinch");
+
+            // Event listener for workout type change
+            mySelect.addEventListener('change', function () {
+                const selectedValue = mySelect.value;
+                if (selectedValue === 'hangboard') {
+                    displayHeading.textContent = "Edge Width";
+                    edgeInput.classList.remove('hidden'); // Show edge input
+                    pinchSelect.classList.add('hidden'); // Hide pinch select
+                    edgeInput.style.display = 'block'; // Ensure block display
+                    pinchSelect.style.display = 'none'; // Ensure none display
+                } else {
+                    displayHeading.textContent = "Pinch Width";
+                    edgeInput.classList.add('hidden'); // Hide edge input
+                    pinchSelect.classList.remove('hidden'); // Show pinch select
+                    edgeInput.style.display = 'none'; // Ensure none display
+                    pinchSelect.style.display = 'block'; // Ensure block display
+                }
+            });
+
+            // Call onload initially to set the correct display based on default selection
+            onload();
+        });
+
+        // Function called when the body loads to initialize UI and localStorage
+        function onload() {
+            const mySelect = document.getElementById('type');
+            const displayHeading = document.getElementById('changedHeading');
+            const edgeInput = document.getElementById("edge");
+            const pinchSelect = document.getElementById("pinch");
+
+            // Set initial display based on the default selected option
+            if (mySelect.value === 'hangboard') {
+                displayHeading.textContent = "Edge Width";
+                edgeInput.classList.remove('hidden');
+                pinchSelect.classList.add('hidden');
+                edgeInput.style.display = 'block';
+                pinchSelect.style.display = 'none';
+            } else {
+                displayHeading.textContent = "Pinch Width";
+                edgeInput.classList.add('hidden');
+                pinchSelect.classList.remove('hidden');
+                edgeInput.style.display = 'none';
+                pinchSelect.style.display = 'block';
+            }
+
+            // Initialize localStorage if it's empty
+            if (!window.localStorage.workout) {
+                window.localStorage.workout = JSON.stringify({ thisSession: [], num: 0 });
+            }
+            if (!window.localStorage.sessions) {
+                window.localStorage.sessions = JSON.stringify({ sessions: [] });
+            }
+        }
+
+        // Resets the current workout session
+        function resetSession() {
+            showConfirm(
+                "Are you sure you want to reset the current session? This will clear all added lifts for this session.",
+                () => { // onConfirm
+                    window.localStorage.workout = JSON.stringify({ thisSession: [], num: 0 });
+                    showAlert("Current session reset!", "Success");
+                },
+                () => { // onCancel
+                    // Do nothing or provide feedback
+                    showAlert("Session reset cancelled.", "Info");
+                }
+            );
+        }
+
+        // Adds a lift to the current session
+        function addLift() {
+            let localData = JSON.parse(window.localStorage.workout);
+            let time = parseInt(document.getElementById("time").value);
+            let weight = parseInt(document.getElementById("weight").value);
+            let workoutType = document.getElementById('type').selectedIndex;
+
+            if (isNaN(time) || isNaN(weight) || time <= 0 || weight <= 0) {
+                showAlert("Please enter valid positive numbers for Time and Weight.", "Input Error");
+                return;
+            }
+
+            if (workoutType === 0) { // Hangboard
+                let edge = parseInt(document.getElementById("edge").value);
+                if (isNaN(edge) || edge <= 0) {
+                    showAlert("Please enter a valid positive number for Edge Width.", "Input Error");
+                    return;
+                }
+                localData.thisSession.push(new hangboard(localData.num, time, edge, weight));
+            } else { // Pinch Block
+                let pinch = document.getElementById("pinch").value;
+                localData.thisSession.push(new pinchblock(localData.num, time, pinch, weight));
+            }
+
             localData.num++;
-        }else{
-            console.log("pinch")
-            localData.thisSession.push(new pinchblock(localData.num,time, pinch, weight))
-            localData.num++;
+            window.localStorage.workout = JSON.stringify(localData);
+            showAlert("Lift added successfully!", "Success");
+
+            // Clear input fields after adding a lift
+            document.getElementById("time").value = "";
+            document.getElementById("weight").value = "";
+            if (workoutType === 0) {
+                document.getElementById("edge").value = "";
+            } else {
+                document.getElementById("pinch").selectedIndex = 0; // Reset pinch select to first option
+            }
         }
 
-        window.localStorage.workout = JSON.stringify(localData)
-    }
-    function completeSession() {
-        let localData = JSON.parse(window.localStorage.sessions)
-        console.log(localData)
-        let workout = JSON.parse(window.localStorage.workout)
-        console.log(workout.thisSession)
-        let currentdate = new Date();
-        workout.thisSession.unshift(currentdate.getMonth()+"/" +currentdate.getDate()+"/"+currentdate.getFullYear());
-        console.log(workout.thisSession)
-        localData.sessions.push(workout.thisSession) 
-        window.localStorage.sessions = JSON.stringify(localData)
-        resetSession()
-        
-    }
-    function wipeData(){
-        localStorage.clear()
-        localStorage.sessions = JSON.stringify({sessions: []})
-        resetSession()
-    }
-</script>
+        // Completes the current session and saves it to history
+        function completeSession() {
+            let localSessions = JSON.parse(window.localStorage.sessions);
+            let currentWorkout = JSON.parse(window.localStorage.workout);
 
-<datalist id="EdgeWidths">
-    <option value="8">
-    <option value="10">
-    <option value="15">
-</datalist>
-<datalist id="CommonTimes">
-    <option value="5">
-    <option value="8">
-    <option value="10">
-</datalist>
+            if (currentWorkout.thisSession.length === 0) {
+                showAlert("No lifts added to the current session. Please add lifts before completing.", "Session Empty");
+                return;
+            }
+
+            showConfirm(
+                `Are you sure you want to complete this session with ${currentWorkout.thisSession.length} lifts?`,
+                () => { // onConfirm
+                    let currentdate = new Date();
+                    // Month is 0-indexed, so add 1
+                    let dateString = `${currentdate.getMonth() + 1}/${currentdate.getDate()}/${currentdate.getFullYear()}`;
+
+                    let sessionToSave = {
+                        date: dateString,
+                        lifts: currentWorkout.thisSession
+                    };
+
+                    localSessions.sessions.push(sessionToSave);
+                    window.localStorage.sessions = JSON.stringify(localSessions);
+                    resetSession(); // Reset current session after saving
+                    showAlert("Session completed and saved!", "Success");
+                },
+                () => { // onCancel
+                    showAlert("Session completion cancelled.", "Info");
+                }
+            );
+        }
+
+        // Wipes all data from localStorage
+        function wipeData() {
+            showConfirm(
+                "Are you absolutely sure you want to wipe ALL stored data? This action cannot be undone.",
+                () => { // onConfirm
+                    localStorage.clear();
+                    localStorage.sessions = JSON.stringify({ sessions: [] });
+                    window.localStorage.workout = JSON.stringify({ thisSession: [], num: 0 }); // Re-initialize current workout
+                    showAlert("All data has been wiped.", "Data Wiped");
+                },
+                () => { // onCancel
+                    showAlert("Data wipe cancelled.", "Info");
+                },
+                "Danger: Wipe All Data"
+            );
+        }
+    </script>
+
+    <!-- Datalists for input suggestions -->
+    <datalist id="EdgeWidths">
+        <option value="8">
+        <option value="10">
+        <option value="15">
+    </datalist>
+    <datalist id="CommonTimes">
+        <option value="5">
+        <option value="8">
+        <option value="10">
+    </datalist>
+</body>
+</html>
