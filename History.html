@@ -1,66 +1,227 @@
-<link rel="manifest" href="manifest.json" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout History</title>
+    <link rel="manifest" href="manifest.json" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the Inter font and to ensure full height */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-<a class = "buttton" href = "currentWorkout.html">Current Workout</a>
-<a class = "buttton" href = "Statistics.html">Statistics</a>
-<a class = "buttton">History</a>
+        /* Ensure the body and html take full height */
+        html, body {
+            height: 100%;
+        }
+        .fullscreenbutton{
+            width:100%;
+            padding:5px;
+            margin-top:10px;
+            border-radius:5px;
+            color: white; /* Ensure text is white for these buttons */
+        }
 
+        /* Styling for table-like form layout (if needed, though tables handle this natively) */
+        .form-table {
+            display: table;
+            width: 100%;
+            border-collapse: separate;
+        }
 
-<style>
-  /* Optional CSS for better appearance */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  th {
-    background-color: #f2f2f2;
-  }
-  .toggle-button {
-    background-color: #007bff; /* Blue */
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 0.8em; /* Smaller button for each row */
-  }
-  .hidden-row {
-    display: none; /* This is the key CSS for hiding */
-  }
-</style>
+        .form-row {
+            display: table-row;
+        }
 
-<a id = "download">DOWNLOAD DATA</a>
+        .form-label-cell {
+            display: table-cell;
+            vertical-align: middle;
+            padding-right: 1rem; /* Space between label and input */
+        }
 
-<body>
+        .form-input-cell {
+            display: table-cell;
+            vertical-align: middle;
+        }
 
-<h1>Collapsible Table with Individual Row Toggles</h1>
+        /* Custom styles for the history table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .history-table th, .history-table td {
+            border: 1px solid #e2e8f0; /* Tailwind's gray-200 */
+            padding: 12px 16px;
+            text-align: left;
+        }
+        .history-table thead th {
+            background-color: #edf2f7; /* Tailwind's gray-200 */
+            font-weight: 600;
+            color: #2d3748; /* Tailwind's gray-800 */
+        }
+        .toggle-button {
+            background-color: #4f46e5; /* Indigo-600 */
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9em;
+            border-radius: 0.375rem; /* rounded-md */
+            transition: background-color 0.2s ease-in-out;
+        }
+        .toggle-button:hover {
+            background-color: #4338ca; /* Indigo-700 */
+        }
+        .hidden-row {
+            display: none; /* This is the key CSS for hiding */
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100" onload="onload()">
 
-<table id="myCollapsibleTable">
-  <thead>
-    <tr>
-      <th >Toggle</th> <th>Workout Date</th>
-      <th colspan="3">Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    
-  </tbody>
-</table>
+    <div id="customModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+            <h3 id="modalTitle" class="text-xl font-bold mb-4 text-gray-800"></h3>
+            <p id="modalMessage" class="text-gray-700 mb-6"></p>
+            <div id="modalButtons" class="flex justify-end space-x-3">
+                </div>
+        </div>
+    </div>
 
-<script>
+    <header class="flex items-center justify-around h-16 w-full bg-indigo-700 shadow-md flex-shrink-0">
+        <a class="navbutton flex-1 flex items-center justify-center py-3 text-white text-lg font-semibold hover:bg-indigo-600 transition-colors duration-300 rounded-tl-lg rounded-bl-lg" href="currentWorkout.html">Current Workout</a>
+        <a class="navbutton flex-1 flex items-center justify-center py-3 text-white text-lg font-semibold hover:bg-indigo-600 transition-colors duration-300" href="Statistics.html">Statistics</a>
+        <a class="navbutton flex-1 flex items-center justify-center py-3 text-white text-lg font-semibold hover:bg-indigo-600 transition-colors duration-300 rounded-tr-lg rounded-br-lg">History</a>
+    </header>
 
-    function wipeData() {
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-xl sm:max-w-2xl flex-col">
+            <h1 class="titletxt text-2xl font-extrabold text-gray-800 text-center mb-6">Workout History</h1>
+
+            <table id="myCollapsibleTable" class="history-table">
+                <thead>
+                    <tr>
+                        <th class="w-1/6"></th> <th class="w-1/3">Workout Date</th>
+                        <th colspan="3">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+
+            <a id="download" class="fullscreenbutton bg-indigo-500 hover:bg-indigo-600 text-center block no-underline">DOWNLOAD ALL DATA</a>
+            <input type="button" onclick="wipeData()" value="Wipe All Data" class="fullscreenbutton bg-red-500 hover:bg-red-600">
+        </div>
+    </main>
+
+    <footer class="h-10 w-full bg-indigo-700 flex items-center justify-center text-white text-sm flex-shrink-0">
+        </footer>
+
+    <script>
+        // Workout data classes (kept for consistency, though not directly used for display in this page)
+        class workout {
+            constructor(t, n, lbs) {
+                this.weight = lbs;
+                this.id = n;
+                this.time = t;
+            }
+        }
+        class hangboard extends workout {
+            constructor(n, t, e, lbs) {
+                super(t, n, lbs);
+                this.type = "h";
+                this.edge = e;
+            }
+        }
+        class pinchblock extends workout {
+            constructor(n, t, w, lbs) {
+                super(t, n, lbs);
+                this.type = "p";
+                this.width = w;
+            }
+        }
+
+        // --- Custom Modal Logic (Copied from Current Workout page) ---
+        const customModal = document.getElementById('customModal');
+        const modalContent = document.getElementById('modalContent');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalButtons = document.getElementById('modalButtons');
+
+        function showModal(title, message, buttons) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modalButtons.innerHTML = ''; // Clear previous buttons
+
+            buttons.forEach(buttonInfo => {
+                const button = document.createElement('button');
+                button.textContent = buttonInfo.text;
+                button.className = `px-4 py-2 rounded-md transition-colors duration-200 ${buttonInfo.isPrimary ? 'bg-indigo-500 text-white hover:bg-indigo-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`;
+                button.onclick = () => {
+                    hideModal();
+                    if (buttonInfo.onClick) {
+                        buttonInfo.onClick();
+                    }
+                };
+                modalButtons.appendChild(button);
+            });
+
+            customModal.classList.remove('hidden');
+            // Animate modal entry
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10); // Small delay to allow 'hidden' to apply first
+        }
+
+        function hideModal() {
+            // Animate modal exit
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                customModal.classList.add('hidden');
+            }, 300); // Match CSS transition duration
+        }
+
+        function showAlert(message, title = "Info") {
+            showModal(title, message, [{ text: "OK", isPrimary: true }]);
+        }
+
+        function showConfirm(message, onConfirm, onCancel, title = "Confirm Action") {
+            showModal(title, message, [
+                { text: "Cancel", onClick: onCancel },
+                { text: "Confirm", isPrimary: true, onClick: onConfirm }
+            ]);
+        }
+        // --- End Custom Modal Logic ---
+
+        // This onload is from the history page, to be used for initial table rendering
+        function onload() {
+            if (!window.localStorage.workout) {
+                window.localStorage.workout = JSON.stringify({ thisSession: [], num: 0 });
+            }
+            if (!window.localStorage.sessions) {
+                window.localStorage.sessions = JSON.stringify({ sessions: [] });
+            }
+            renderTable(); // Call renderTable to populate the history table on load
+        }
+
+        function wipeData() {
             showConfirm(
                 "Are you absolutely sure you want to wipe ALL stored data? This action cannot be undone.",
                 () => { // onConfirm
                     localStorage.clear();
+                    // Re-initialize localStorage to avoid errors if the user goes back to the workout page
                     localStorage.sessions = JSON.stringify({ sessions: [] });
-                    window.localStorage.workout = JSON.stringify({ thisSession: [], num: 0 }); // Re-initialize current workout
+                    window.localStorage.workout = JSON.stringify({ thisSession: [], num: 0 });
                     showAlert("All data has been wiped.", "Data Wiped");
+                    renderTable(); // Re-render table after wiping data
                 },
                 () => { // onCancel
                     showAlert("Data wipe cancelled.", "Info");
@@ -69,117 +230,130 @@
             );
         }
 
-    document.addEventListener('DOMContentLoaded', function() {
+        function renderTable() {
+            const tableBody = document.querySelector('#myCollapsibleTable tbody');
+            tableBody.innerHTML = ''; // Clear existing rows before re-rendering
+            let sessions = JSON.parse(window.localStorage.sessions).sessions;
+            let c = 1;
 
-        //download button
-        const dataString = JSON.stringify(localStorage);
-        const blob = new Blob([dataString], { type: 'text' });
-        const url = URL.createObjectURL(blob);
-        document.getElementById("download").href = url
-        document.getElementById("download").download = 'data.txt';
-
-        let sessions = JSON.parse(window.localStorage.sessions).sessions
-        console.log(sessions)
-        table = document.getElementById("myCollapsibleTable")
-        let c = 1
-        for (let session of sessions){
-
-            //visible row
-            const controlRow = table.insertRow(-1);
-            buttoncell = controlRow.insertCell(0);
-            button = document.createElement('button');
-            // <button class="toggle-button" data-row-id="row1">Toggle</button>
-            button.classList.add("toggle-button")
-            button.setAttribute("data-row-id", "row"+c)
-            button.textContent = "Toggle";
-            buttoncell.appendChild( button);
-            date = controlRow.insertCell(1);
-            date.textContent = session.shift();
-            detail = controlRow.insertCell(2);
-            detail.textContent = "Expand To See More"
-            detail.setAttribute('colspan', '3');
-            //subtitles
-            titleRow = table.insertRow(-1);
-            titleRow.classList.add("hidden-row")
-            titleRow.classList.add("row"+c)
-
-            typeH = titleRow.insertCell(0);
-            typeH.textContent = "Type";
-
-            dateH = titleRow.insertCell(1);
-
-            widthH = titleRow.insertCell(2);
-            widthH.textContent = "Width";
-
-            timeH = titleRow.insertCell(3);
-            timeH.textContent = "Time";
-
-            weightH = titleRow.insertCell(4);
-            weightH.textContent = "Weight";
-            //
-
-
-            for (let lift of session){
-                console.log(lift)
-                //liftRow
-                liftRow = table.insertRow(-1);
-                liftRow.classList.add("hidden-row")
-                liftRow.classList.add("row"+c)
-
-                type = liftRow.insertCell(0);
-                type.textContent = lift.type == "h" ? "Hangboard" : "Pinch Block" 
-
-                date = liftRow.insertCell(1);
-
-                width = liftRow.insertCell(2);
-                if (lift.type == "h") {
-                    width.textContent = lift.edge + "mm"
-                }else{
-                    switch (lift.width) {
-                        case 0: width.textContent ="Thin Wood";break;
-                        case 1: width.textContent ="Wide Wood";break;
-                        case 2: width.textContent ="Thin Metal";break;
-                        case 3: width.textContent ="Wide Metal";break;
-                    }
-                }
-
-                timeH = liftRow.insertCell(3);
-                timeH.textContent = lift.time + "sec"
-
-                weightH = liftRow.insertCell(4);
-                weightH.textContent = (lift.type == "h" ? "BW+" : "" )+ lift.weight + "lbs"
+            if (sessions.length === 0) {
+                const noDataRow = tableBody.insertRow(-1);
+                const cell = noDataRow.insertCell(0);
+                cell.colSpan = 5;
+                cell.textContent = "No workout sessions recorded yet.";
+                cell.className = "text-center py-4 text-gray-500 italic";
+                return;
             }
 
-            c++;
+            for (let session of sessions.reverse()) {
+                // Ensure a deep copy of the session array for manipulation
+                let currentSession = JSON.parse(JSON.stringify(session));
+
+                // Visible row for the session date and toggle button
+                const controlRow = tableBody.insertRow(-1);
+                controlRow.className = "bg-white hover:bg-gray-50 transition-colors duration-150";
+
+                const buttonCell = controlRow.insertCell(0);
+                const button = document.createElement('button');
+                button.classList.add("toggle-button");
+                button.setAttribute("data-row-id", "row" + c);
+                button.textContent = "Show"; // Initial text
+                buttonCell.appendChild(button);
+
+                const dateCell = controlRow.insertCell(1);
+                dateCell.textContent = currentSession.shift(); // Get and remove the date string
+
+                const detailCell = controlRow.insertCell(2);
+                detailCell.textContent = "Expand To See Details";
+                detailCell.setAttribute('colspan', '3');
+                detailCell.classList.add("text-gray-600");
+
+                // Subtitle row for lift details
+                const titleRow = tableBody.insertRow(-1);
+                titleRow.classList.add("hidden-row", "row" + c);
+                titleRow.classList.add("bg-gray-50", "font-medium", "text-gray-700"); // Styling for subtitle row
+
+                const typeH = titleRow.insertCell(0);
+                typeH.textContent = "Type";
+                typeH.colSpan = 2; // Span across toggle and date columns
+
+                const widthH = titleRow.insertCell(1);
+                widthH.textContent = "Width/Type";
+
+                const timeH = titleRow.insertCell(2);
+                timeH.textContent = "Time";
+
+                const weightH = titleRow.insertCell(3);
+                weightH.textContent = "Weight";
+
+                // Rows for individual lifts within the session
+                for (let lift of currentSession) {
+                    const liftRow = tableBody.insertRow(-1);
+                    liftRow.classList.add("hidden-row", "row" + c);
+                    liftRow.classList.add("bg-white"); // Styling for lift rows
+
+                    const typeCell = liftRow.insertCell(0);
+                    typeCell.textContent = lift.type === "h" ? "Hangboard" : "Pinch Block";
+                    typeCell.colSpan = 2;
+
+                    const widthCell = liftRow.insertCell(1);
+                    if (lift.type === "h") {
+                        widthCell.textContent = lift.edge + " mm";
+                    } else {
+                        // Map pinch block width values to descriptive strings
+                        switch (lift.width) {
+                            case "thin-wood": widthCell.textContent = "Thin Wood"; break;
+                            case "wide-wood": widthCell.textContent = "Wide Wood"; break;
+                            case "thin-metal": widthCell.textContent = "Thin Metal"; break;
+                            case "wide-metal": widthCell.textContent = "Wide Metal"; break;
+                            default: widthCell.textContent = lift.width; // Fallback
+                        }
+                    }
+
+                    const timeCell = liftRow.insertCell(2);
+                    timeCell.textContent = lift.time + " sec";
+
+                    const weightCell = liftRow.insertCell(3);
+                    weightCell.textContent = (lift.type === "h" ? "BW+" : "") + lift.weight + " lbs";
+                }
+                c++;
+            }
+
+            // Attach event listeners after all rows are rendered
+            attachToggleListeners();
+
+            // Set up download button
+            const dataString = JSON.stringify(localStorage);
+            const blob = new Blob([dataString], { type: 'text/plain' }); // Correct MIME type for text
+            const url = URL.createObjectURL(blob);
+            document.getElementById("download").href = url;
+            document.getElementById("download").download = 'workout_data.json'; // Suggest a JSON file name
         }
 
-
-        // attachListeners
-        // Get all toggle buttons
-        var toggleButtons = document.querySelectorAll('.toggle-button');
-        console.log(toggleButtons)
-        // Loop through each button and attach an event listener
-        toggleButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-            // Get the ID of the row to toggle from the data-row-id attribute
-            var rowId = this.dataset.rowId; // 'this' refers to the clicked button
-            var rowsToToggle = document.getElementsByClassName(rowId);
-            console.log(rowsToToggle)
-
-            // Toggle the display property
-            for (let rowToToggle of rowsToToggle) {
-                console.log(rowToToggle);
-            if (rowToToggle.style.display === 'none' || rowToToggle.style.display === '') {
-                rowToToggle.style.display = 'table-row';
-            } else {
-                rowToToggle.style.display = 'none';
-            }}
+        function attachToggleListeners() {
+            var toggleButtons = document.querySelectorAll('.toggle-button');
+            toggleButtons.forEach(function(button) {
+                button.removeEventListener('click', handleToggleClick); // Prevent duplicate listeners
+                button.addEventListener('click', handleToggleClick);
             });
-        });
-    });
+        }
 
-  
-</script>
+        function handleToggleClick() {
+            const rowId = this.dataset.rowId;
+            const rowsToToggle = document.querySelectorAll('.' + rowId);
+            const isHidden = rowsToToggle[0].style.display === 'none' || rowsToToggle[0].style.display === '';
 
+            rowsToToggle.forEach(rowToToggle => {
+                rowToToggle.style.display = isHidden ? 'table-row' : 'none';
+            });
+            this.textContent = isHidden ? "Hide" : "Show"; // Update button text
+            const detailCell = this.closest('tr').querySelector('td:nth-child(3)');
+            detailCell.textContent = isHidden ? "Click 'Hide' to collapse" : "Expand To See Details";
+        }
+
+        // Call renderTable when the DOM is fully loaded, in addition to onload()
+        document.addEventListener('DOMContentLoaded', onload);
+
+    </script>
 </body>
 </html>
