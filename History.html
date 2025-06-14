@@ -53,7 +53,21 @@
 
 <script>
 
-    
+    function wipeData() {
+            showConfirm(
+                "Are you absolutely sure you want to wipe ALL stored data? This action cannot be undone.",
+                () => { // onConfirm
+                    localStorage.clear();
+                    localStorage.sessions = JSON.stringify({ sessions: [] });
+                    window.localStorage.workout = JSON.stringify({ thisSession: [], num: 0 }); // Re-initialize current workout
+                    showAlert("All data has been wiped.", "Data Wiped");
+                },
+                () => { // onCancel
+                    showAlert("Data wipe cancelled.", "Info");
+                },
+                "Danger: Wipe All Data"
+            );
+        }
 
     document.addEventListener('DOMContentLoaded', function() {
 

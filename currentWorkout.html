@@ -21,13 +21,17 @@
         html, body {
             height: 100%;
         }
-
+        .fullscreenbutton{
+            width:100%;
+            padding:5px;
+            margin-top:10px;
+            border-radius:5px;
+        }
         /* Styling for table-like form layout */
         .form-table {
             display: table;
             width: 100%;
             border-collapse: separate;
-            border-spacing: 0 1rem; /* Vertical spacing between rows */
         }
 
         .form-row {
@@ -71,17 +75,17 @@
 
     <!-- Header Section -->
     <header class="flex items-center justify-around h-16 w-full bg-indigo-700 shadow-md flex-shrink-0">
-        <a class="navbutton flex-1 flex items-center justify-center py-3 text-white text-lg font-semibold hover:bg-indigo-600 transition-colors duration-300 rounded-tl-lg rounded-bl-lg" href="index.html">Current Workout</a>
+        <a class="navbutton flex-1 flex items-center justify-center py-3 text-white text-lg font-semibold hover:bg-indigo-600 transition-colors duration-300 rounded-tl-lg rounded-bl-lg">Current Workout</a>
         <a class="navbutton flex-1 flex items-center justify-center py-3 text-white text-lg font-semibold hover:bg-indigo-600 transition-colors duration-300" href="Statistics.html">Statistics</a>
         <a class="navbutton flex-1 flex items-center justify-center py-3 text-white text-lg font-semibold hover:bg-indigo-600 transition-colors duration-300 rounded-tr-lg rounded-br-lg" href="History.html">History</a>
     </header>
 
     <!-- Main Body Section -->
     <main class="flex-grow flex flex-col items-center justify-center p-4">
-        <form class="bg-white p-6 rounded-lg shadow-xl w-full max-w-xl sm:max-w-2xl">
+        <form class="bg-white p-4 rounded-lg shadow-xl w-full max-w-xl sm:max-w-2xl flex-col">
             <input type="button" onclick="resetSession()" value="Reset Session" class="fullscreenbutton bg-red-500 hover:bg-red-600">
 
-            <p class="titletxt text-2xl font-extrabold text-gray-800 text-center mb-6">Workout Type</p>
+            <p class="titletxt text-2xl font-extrabold text-gray-800 text-center mb-6 mt-2">Workout Type</p>
             <div class="form-row">
                 <div class="form-label-cell">
                     <label for="type" class="labeltxt text-lg font-medium text-gray-700">Type</label>
@@ -109,7 +113,7 @@
                 </div>
             </div>
 
-            <div class="form-row">
+            <div class="form-row ">
                 <div class="form-label-cell">
                     <label for="time" class="labeltxt text-lg font-medium text-gray-700">Time</label>
                 </div>
@@ -127,9 +131,11 @@
                 </div>
             </div>
             
-            <input type="button" onclick="addLift()" value="Add lift" class="fullscreenbutton bg-indigo-500 hover:bg-indigo-600">
-            <input type="button" onclick="completeSession()" value="Complete Session" class="fullscreenbutton bg-green-500 hover:bg-green-600">
-            <input type="button" onclick="wipeData()" value="Wipe All Data" class="fullscreenbutton bg-gray-500 hover:bg-gray-600">
+            <div class ="" style="width:100%">
+                <input type="button" onclick="addLift()" value="Add lift" class="fullscreenbutton bg-indigo-500 hover:bg-indigo-600">
+                <input type="button" onclick="completeSession()" value="Complete Session" class="fullscreenbutton bg-green-500 hover:bg-green-600">
+                <input type="button" onclick="wipeData()" value="Wipe All Data" class="fullscreenbutton bg-gray-500 hover:bg-gray-600">
+            </div>
         </form>
     </main>
 
@@ -297,8 +303,8 @@
             let weight = parseInt(document.getElementById("weight").value);
             let workoutType = document.getElementById('type').selectedIndex;
 
-            if (isNaN(time) || isNaN(weight) || time <= 0 || weight <= 0) {
-                showAlert("Please enter valid positive numbers for Time and Weight.", "Input Error");
+            if (isNaN(time) || isNaN(weight) || time <= 0) {
+                showAlert("Please enter valid positive numbers for Time", "Input Error");
                 return;
             }
 
@@ -318,14 +324,6 @@
             window.localStorage.workout = JSON.stringify(localData);
             showAlert("Lift added successfully!", "Success");
 
-            // Clear input fields after adding a lift
-            document.getElementById("time").value = "";
-            document.getElementById("weight").value = "";
-            if (workoutType === 0) {
-                document.getElementById("edge").value = "";
-            } else {
-                document.getElementById("pinch").selectedIndex = 0; // Reset pinch select to first option
-            }
         }
 
         // Completes the current session and saves it to history
@@ -345,10 +343,7 @@
                     // Month is 0-indexed, so add 1
                     let dateString = `${currentdate.getMonth() + 1}/${currentdate.getDate()}/${currentdate.getFullYear()}`;
 
-                    let sessionToSave = {
-                        date: dateString,
-                        lifts: currentWorkout.thisSession
-                    };
+                    let sessionToSave = [dateString,...currentWorkout.thisSession]
 
                     localSessions.sessions.push(sessionToSave);
                     window.localStorage.sessions = JSON.stringify(localSessions);
@@ -362,21 +357,7 @@
         }
 
         // Wipes all data from localStorage
-        function wipeData() {
-            showConfirm(
-                "Are you absolutely sure you want to wipe ALL stored data? This action cannot be undone.",
-                () => { // onConfirm
-                    localStorage.clear();
-                    localStorage.sessions = JSON.stringify({ sessions: [] });
-                    window.localStorage.workout = JSON.stringify({ thisSession: [], num: 0 }); // Re-initialize current workout
-                    showAlert("All data has been wiped.", "Data Wiped");
-                },
-                () => { // onCancel
-                    showAlert("Data wipe cancelled.", "Info");
-                },
-                "Danger: Wipe All Data"
-            );
-        }
+        
     </script>
 
     <!-- Datalists for input suggestions -->
