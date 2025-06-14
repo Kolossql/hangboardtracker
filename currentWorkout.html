@@ -1,58 +1,123 @@
 <link rel="manifest" href="manifest.json" />
 
-<a class = "buttton" width="33%">Current Workout</a>
-<a class = "buttton" href = "Statistics.html" width="33%">Statistics</a>
-<a class = "buttton" href = "History.html" width="33%">History</a>
 <style>
-form  { display: table;      }
-p     { display: table-row;  }
-label { display: table-cell; }
-input { display: table-cell; }
-.fullscreenbutton {
+    form  { display: table;      }
+    p     { display: table-row;  }
+    label { display: table-cell; }
+    input { display: table-cell; }
+    .nav-container {
+            height: 20%; /* Corrected typo: "300 px" to "300px" */
+            width: 100%; /* Ensure the container itself takes full width */
+            display: flex; /* Makes this div a flex container */
+            justify-content: space-around; /* Distributes items with space around them */
+            /* Alternatively, use justify-content: space-between; for items pushed to ends with space between */
+            /* Or justify-content: stretch; if you want items to stretch to fill remaining space */
+            align-items: stretch; /* Makes children stretch to fill the height of the container */
+            overflow: hidden; /* Ensures rounded corners apply to children if they extend */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top:10px;
+        }
+    .navbutton {
+        width:20%;
+        height:15%;
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #4c66af;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .navbutton:hover {
+        background-color: #4c66af9b;
+        color:black
+    }
+    .fullscreenbutton {
         display:"block";
         width:100%;
-        padding:5px;
+        height: 15%;
+        padding-top:5px;
+        padding-bottom:5px;
         margin: 5px;
         border-radius: 5px;
-}
-.titletxt{
-    width: 100%;
-    margin-top: 10px;
-    text-align: center;
-    font-size: x-large;
-    display:block;
-}
-.labeltxt{
-    font-size:large;
-    text-align: left;
+    }
+    .titletxt{
+        width: 100%;
+        margin-top: 10px;
+        text-align: center;
+        font-size: x-large;
+        display:block;
+    }
+    .labeltxt{
+        font-size:large;
+        text-align: left;
+    }
+.header {
+    height: 40px;
+    background-color: red;
 }
 
+.mainBody {
+    background-color: yellow;
+    position: absolute;
+    top: 40px;
+    bottom: 20px;
+    width:100%;
+    flex-direction: column;
+    align-content: space-evenly;
+}
+
+.content {
+    color:#fff;
+}
+
+.footer {
+    height: 20px;
+    background-color: blue;
+    
+    position: absolute;
+    bottom: 0;
+    width:100%;
+}
+    
 </style>
+<div class="header">
 
-<form style="align-items: left;">
-    <input type="button" onclick="resetSession()" value="Reset Session">
-    <hp class="titletxt">Workout Type</p>
-    <select id="type"> <!--This field submitted successfully -->
-        <option value="hangboard"> Hangboard </option>
-        <option value="pinch block"> Pinch Block</option>..........
-    </select>
-    <label class="labeltxt" id = "changedHeading">Edge Width</p>
-    <input id="edge" style="display: block" type="number" list="EdgeWidths" title="Edge">
-    <select id="pinch" style="display: none"type="number" list="EdgeWidths" title="Edge">
-        <option value="thin-wood">Thin Wood</option>
-        <option value="wide-wood">Wide Wood</option>
-        <option value="thin-metal">Thin Metal</option>
-        <option value="wide-metal">Wide Metal</option>
-    </select>
-    <label class="labeltxt">Time</p>
-    <input id="time" type="number" list="CommonTimes" title="Time">
-    <label class="labeltxt">Weight</p>
-    <input id="weight" type="number"  title="Weight">
-    <input class="fullscreenbutton" type="button" onclick="addLift()" value="Add lift">
-    </div>
-    <input class="fullscreenbutton" type="button" onclick="completeSession()" value="Complete Session">
-</form>
+</div>
+<div class="mainBody">
+    <!-- <div class="nav-container"> -->
+    <a class = "navbutton" >Current Workout</a>
+    <a class = "navbutton" href = "Statistics.html" >Statistics</a>
+    <a class = "navbutton" href = "History.html">History</a>
+    <!-- </div> -->
 
+    <form style="align-items: left;">
+        <input class="fullscreenbutton" type="button" onclick="resetSession()" value="Reset Session">
+        <hp class="titletxt">Workout Type</p>
+        <select id="type"> <!--This field submitted successfully -->
+            <option value="hangboard"> Hangboard </option>
+            <option value="pinch block"> Pinch Block</option>..........
+        </select>
+        <label class="labeltxt" id = "changedHeading">Edge Width</p>
+        <input id="edge" style="display: block" type="number" list="EdgeWidths" title="Edge">
+        <select id="pinch" style="display: none"type="number" list="EdgeWidths" title="Edge">
+            <option value="thin-wood">Thin Wood</option>
+            <option value="wide-wood">Wide Wood</option>
+            <option value="thin-metal">Thin Metal</option>
+            <option value="wide-metal">Wide Metal</option>
+        </select>
+        <label class="labeltxt">Time</p>
+        <input id="time" type="number" list="CommonTimes" title="Time">
+        <label class="labeltxt">Weight</p>
+        <input id="weight" type="number"  title="Weight">
+        <input  class="fullscreenbutton" type="button" onclick="addLift()" value="Add lift">
+        <input class="fullscreenbutton" type="button" onclick="completeSession()" value="Complete Session">
+    </form>
+</div>
 <script>
     class workout{
         constructor(t, n, lbs){
