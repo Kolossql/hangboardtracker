@@ -1,10 +1,8 @@
 <a class = "buttton" href = "currentWorkout.html">Current Workout</a>
 <a class = "buttton" href = "Statistics.html">Statistics</a>
 <a class = "buttton">History</a>
-<!DOCTYPE html>
-<html>
-<head>
-<title>Collapsible Table with Individual Row Toggles</title>
+
+
 <style>
   /* Optional CSS for better appearance */
   table {
@@ -32,7 +30,9 @@
     display: none; /* This is the key CSS for hiding */
   }
 </style>
-</head>
+
+<a id = "download">DOWNLOAD DATA</a>
+
 <body>
 
 <h1>Collapsible Table with Individual Row Toggles</h1>
@@ -50,7 +50,18 @@
 </table>
 
 <script>
+
+    
+
     document.addEventListener('DOMContentLoaded', function() {
+
+        //download button
+        const dataString = JSON.stringify(localStorage);
+        const blob = new Blob([dataString], { type: 'text' });
+        const url = URL.createObjectURL(blob);
+        document.getElementById("download").href = url
+        document.getElementById("download").download = 'data.txt';
+
         let sessions = JSON.parse(window.localStorage.sessions).sessions
         console.log(sessions)
         table = document.getElementById("myCollapsibleTable")
